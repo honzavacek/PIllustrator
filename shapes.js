@@ -450,8 +450,8 @@ class Rectangle extends Shape {
   }
 
   generatePro(sx, sy) {
-    let x = this.x - sx;
-    let y = this.y - sy;
+    let x = floor(this.x - sx);
+    let y = floor(this.y - sy);
 
     let rect =
       "rect(x + " +
@@ -459,9 +459,9 @@ class Rectangle extends Shape {
       " * scale, y + " +
       y +
       " * scale, " +
-      this.w +
+      floor(this.w) +
       " * scale, " +
-      this.h +
+      floor(this.h) +
       " * scale);";
 
     let fill =
@@ -543,17 +543,18 @@ class Ellipse extends Shape {
   }
 
   generatePro(sx, sy) {
-    let x = this.x - sx;
-    let y = this.y - sy;
+    let x = floor(this.x - sx);
+    let y = floor(this.y - sy);
+
     let ellipse =
       "ellipse(x + " +
       x +
       " * scale, y + " +
       y +
       " * scale, " +
-      this.w +
+      floor(this.w) +
       " * scale, " +
-      this.h +
+      floor(this.h) +
       " * scale);";
 
     let fill =
