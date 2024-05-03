@@ -189,16 +189,22 @@ class Shape {
   }
 
   selRect() {
+    push();
     rectMode(CENTER);
     noFill();
     stroke(255, 0, 0);
     strokeWeight(2);
     rect(this.x, this.y, this.w, this.h);
+    pop();
   }
 
   displaySelected() {
     push();
     this.selRect();
+    rectMode(CENTER);
+    noFill();
+    stroke(255, 0, 0);
+    strokeWeight(2);
 
     if (this.onTopLeft())
       rect(this.x - this.w / 2, this.y - this.h / 2, this.d, this.d);
@@ -473,7 +479,7 @@ class Rectangle extends Shape {
       round(blue(this.c1)) +
       ");";
 
-    return fill + "\n" + rect;
+    return fill + "\n   " + rect;
   }
 }
 
@@ -566,7 +572,7 @@ class Ellipse extends Shape {
       round(blue(this.c1)) +
       ");";
 
-    return fill + "\n" + ellipse;
+    return fill + "\n   " + ellipse;
   }
 }
 

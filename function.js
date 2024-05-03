@@ -23,7 +23,20 @@ function shapesRunAndDisplay() {
       }
     }
     shapes[i].run();
-    shapes[i].display(shapes[i].mouseOn(con) && selShape == null);
+    shapes[i].display(
+      shapes[i].mouseOn(con) &&
+        selShape == null &&
+        creator.seleB.switch &&
+        !selecting
+    );
+  }
+
+  if (selecting) {
+    for (let i = 0; i < shapes.length; i++) {
+      if (shapes[i].centerIn(selX, selY, mouseX, mouseY)) {
+        shapes[i].selRect();
+      }
+    }
   }
 
   if (selShape != null) {
@@ -91,13 +104,13 @@ function processing() {
   let x = canvaX / 2;
   let y = canvaY / 2;
   let msg =
-    "void shapes (float x, float y, float scale){\npush();\nrectMode(CENTER);\n";
+    "void shapes (float x, float y, float scale){\n   push();\n   rectMode(CENTER);\n";
 
   for (let i = 0; i < shapes.length; i++) {
-    msg += shapes[i].generatePro(x, y) + "\n";
+    msg += "   " + shapes[i].generatePro(x, y) + "\n";
   }
 
-  msg += "pop();\n}";
+  msg += "   pop();\n}";
 
   console.log(msg);
   copyStringToClipboard(msg);
