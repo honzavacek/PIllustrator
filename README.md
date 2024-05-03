@@ -8,10 +8,12 @@ You can create your own image.
 
 ![plot](./fotos/foto1.png)
 
-Then the application generate a function, whitch you can use in your processing code.
+If you press 'g' the application prints to console function, whitch you can use in your processing code.
 
 First two arguments are for setting position. And the last argument is for appling a scale.
 
 ```javascript
 void shapes (float x, float y, float scale){...}
 ```
+
+![plot](./fotos/foto2.png)
