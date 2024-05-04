@@ -15,6 +15,10 @@ class Shape {
     this.scy = 0;
     this.dragging = -1; // -1 no dragging, 0 moving, 1 top, 2 right, 3 bottom, 4 left, 5 right top, 6 right bottom, 7 left bottom, 8 left top
     this.d = 10;
+
+    this.r = 0;
+    this.rotCirD = 10;
+    this.rotDist = 20;
   }
 
   startDragging(start) {
@@ -78,7 +82,10 @@ class Shape {
       this.spx = this.x + this.w / 2;
       this.spy = this.y + this.h / 2;
       //console.log("tl");
-    } else {
+    } // else if (this.onRotation()) {
+    //this.dragging = 9;
+    //}
+    else {
       this.dragging = 0;
       this.sdx = this.x - mouseX;
       this.sdy = this.y - mouseY;
@@ -455,7 +462,7 @@ class Rectangle extends Shape {
     layers.pg.pop();
   }
 
-  generatePro(sx, sy) {
+  generatePro(sx, sy, enter) {
     let x = floor(this.x - sx);
     let y = floor(this.y - sy);
 
@@ -479,7 +486,7 @@ class Rectangle extends Shape {
       round(blue(this.c1)) +
       ");";
 
-    return fill + "\n   " + rect;
+    return fill + enter + "   " + rect;
   }
 }
 
@@ -548,7 +555,7 @@ class Ellipse extends Shape {
     return false;
   }
 
-  generatePro(sx, sy) {
+  generatePro(sx, sy, enter) {
     let x = floor(this.x - sx);
     let y = floor(this.y - sy);
 
@@ -572,7 +579,7 @@ class Ellipse extends Shape {
       round(blue(this.c1)) +
       ");";
 
-    return fill + "\n   " + ellipse;
+    return fill + enter + "   " + ellipse;
   }
 }
 

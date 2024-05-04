@@ -116,6 +116,21 @@ function processing() {
   copyStringToClipboard(msg);
 }
 
+function processingMsg() {
+  let x = canvaX / 2;
+  let y = canvaY / 2;
+  let msg =
+    "void shapes (float x, float y, float scale){<br>   push();<br>   rectMode(CENTER);<br>";
+
+  for (let i = 0; i < shapes.length; i++) {
+    msg += "   " + shapes[i].generatePro(x, y, "<br>") + "<br>";
+  }
+
+  msg += "   pop();<br>}<br>";
+
+  return msg;
+}
+
 function copyItem() {
   if (selShape != null) {
     for (let i = 0; i < selShape.infos.length; i++) {

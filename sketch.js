@@ -55,6 +55,9 @@ function draw() {
   if (selShape != null) {
     selShape.displaySelected();
   }
+
+  let elem = select("#fnc");
+  elem.html(processingMsg());
 }
 
 function mousePressed() {
