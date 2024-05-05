@@ -1,5 +1,5 @@
 class Shape {
-  constructor(x, y, w, h, c1, c2, sw) {
+  constructor(x, y, w, h, c1, c2, sw, r) {
     this.x = x;
     this.y = y;
     this.w = w;
@@ -7,91 +7,86 @@ class Shape {
     this.c1 = c1;
     this.c2 = c2;
     this.sw = sw;
-    this.sdx = 0;
-    this.sdy = 0;
-    this.spx = 0;
-    this.spy = 0;
-    this.scx = 0;
-    this.scy = 0;
-    this.dragging = -1; // -1 no dragging, 0 moving, 1 top, 2 right, 3 bottom, 4 left, 5 right top, 6 right bottom, 7 left bottom, 8 left top
+    //this.sdx = 0;
+    //this.sdy = 0;
+    //this.spx = 0;
+    //this.spy = 0;
+    //this.scx = 0;
+    //this.scy = 0;
+    this.dragging = -1; // -1 no dragging, 0 moving, 1 top, 2 right, 3 bottom, 4 left, 5 right top, 6 right bottom, 7 left bottom, 8 left top, 9 rotation
     this.d = 10;
 
-    this.r = 0;
-    this.rotCirD = 10;
+    this.nx = 0;
+    this.ny = 0;
+
+    this.r = r;
+    this.rotCirD = 15;
     this.rotDist = 20;
+
+    this.dragInfo;
   }
 
   startDragging(start) {
+    this.dragInfo = new ShapeDragInfo(
+      this.x,
+      this.y,
+      this.w,
+      this.h,
+      this.r,
+      this.topRight(),
+      this.bottomRight(),
+      this.bottomLeft(),
+      this.topLeft(),
+      0,
+      0
+    );
+
     if (start) {
       this.dragging = 0;
-      this.sdx = this.x - mouseX;
-      this.sdy = this.y - mouseY;
-      this.spx = this.x;
-      this.spy = this.y;
-
-      //console.log("s");
+      this.dragInfo.dx = this.x - mouseX;
+      this.dragInfo.dy = this.y - mouseY;
     } else if (this.onTop()) {
       this.dragging = 1;
-      this.sdy = this.y - this.h / 2 - mouseY;
-      this.spy = this.y + this.h / 2;
-      this.scy = this.y;
-      //console.log("t");
+      this.dragInfo.dx = 0;
+      this.dragInfo.dy = -this.h / 2 - this.ny;
     } else if (this.onRight()) {
       this.dragging = 2;
-      this.sdx = this.x + this.w / 2 - mouseX;
-      this.spx = this.x - this.w / 2;
-      this.scx = this.x;
-      //console.log("r");
+      this.dragInfo.dx = +this.w / 2 - this.nx;
+      this.dragInfo.dy = 0;
     } else if (this.onBottom()) {
       this.dragging = 3;
-      this.sdy = this.y + this.h / 2 - mouseY;
-      this.spy = this.y - this.h / 2;
-      this.scy = this.y;
-      //console.log("b");
+      this.dragInfo.dx = 0;
+      this.dragInfo.dy = +this.h / 2 - this.ny;
     } else if (this.onLeft()) {
       this.dragging = 4;
-      this.sdx = this.x - this.w / 2 - mouseX;
-      this.spx = this.x + this.w / 2;
-      this.scx = this.x;
-      //console.log("l");
+      this.dragInfo.dx = -this.w / 2 - this.nx;
+      this.dragInfo.dy = 0;
     } else if (this.onTopRight()) {
       this.dragging = 5;
-      this.sdx = this.x + this.w / 2 - mouseX;
-      this.sdy = this.y - this.h / 2 - mouseY;
-      this.spx = this.x - this.w / 2;
-      this.spy = this.y + this.h / 2;
-      //console.log("tr");
+      this.dragInfo.dx = +this.w / 2 - this.nx;
+      this.dragInfo.dy = -this.h / 2 - this.ny;
     } else if (this.onBottomRight()) {
       this.dragging = 6;
-      this.sdx = this.x + this.w / 2 - mouseX;
-      this.sdy = this.y + this.h / 2 - mouseY;
-      this.spx = this.x - this.w / 2;
-      this.spy = this.y - this.h / 2;
-      //console.log("br");
+      this.dragInfo.dx = +this.w / 2 - this.nx;
+      this.dragInfo.dy = +this.h / 2 - this.ny;
     } else if (this.onBottomLeft()) {
       this.dragging = 7;
-      this.sdx = this.x - this.w / 2 - mouseX;
-      this.sdy = this.y + this.h / 2 - mouseY;
-      this.spx = this.x + this.w / 2;
-      this.spy = this.y - this.h / 2;
-      //console.log("bl");
+      this.dragInfo.dx = -this.w / 2 - this.nx;
+      this.dragInfo.dy = +this.h / 2 - this.ny;
     } else if (this.onTopLeft()) {
       this.dragging = 8;
-      this.sdx = this.x - this.w / 2 - mouseX;
-      this.sdy = this.y - this.h / 2 - mouseY;
-      this.spx = this.x + this.w / 2;
-      this.spy = this.y + this.h / 2;
-      //console.log("tl");
-    } // else if (this.onRotation()) {
-    //this.dragging = 9;
-    //}
-    else {
+      this.dragInfo.dx = -this.w / 2 - this.nx;
+      this.dragInfo.dy = -this.h / 2 - this.ny;
+    } else if (this.onRotator()) {
+      this.dragging = 9;
+      let x = this.x + sin(this.r) * (this.rotDist + abs(this.h) / 2);
+      let y = this.y - cos(this.r) * (this.rotDist + abs(this.h) / 2);
+      this.dragInfo.dx = x - mouseX;
+      this.dragInfo.dy = y - mouseY;
+    } else {
       this.dragging = 0;
-      this.sdx = this.x - mouseX;
-      this.sdy = this.y - mouseY;
-      this.spx = this.x;
-      this.spy = this.y;
-      //console.log("e");
+      this.dragInfo.dx = this.x - mouseX;
+      this.dragInfo.dy = this.y - mouseY;
     }
   }
 
@@ -102,39 +97,92 @@ class Shape {
   }
 
   run() {
+    let nxP;
+    let nyP;
+
+    let x = mouseX - this.x;
+    let y = mouseY - this.y;
+
+    this.nx = cos(this.r) * x + sin(this.r) * y;
+    this.ny = -sin(this.r) * x + cos(this.r) * y;
+
+    //p.html(this.nx + "  " + this.ny + "   " + this.r);
+
+    if (this.dragging != -1) {
+      x = mouseX - this.dragInfo.x;
+      y = mouseY - this.dragInfo.y;
+
+      nxP = cos(this.r) * x + sin(this.r) * y;
+      nyP = -sin(this.r) * x + cos(this.r) * y;
+    }
+
     if (this.dragging == 0) {
       if (!shift) {
-        this.x = mouseX + this.sdx;
-        this.y = mouseY + this.sdy;
+        this.x = mouseX + this.dragInfo.dx;
+        this.y = mouseY + this.dragInfo.dy;
       } else {
         if (
-          abs(mouseX + this.sdx - this.spx) >= abs(mouseY + this.sdy - this.spy)
+          abs(mouseX + this.dragInfo.dx - this.dragInfo.x) >=
+          abs(mouseY + this.dragInfo.dy - this.dragInfo.y)
         ) {
-          this.x = mouseX + this.sdx;
-          this.y = this.spy;
+          this.x = mouseX + this.dragInfo.dx;
+          this.y = this.dragInfo.y;
         } else {
-          this.y = mouseY + this.sdy;
-          this.x = this.spx;
+          this.y = mouseY + this.dragInfo.dy;
+          this.x = this.dragInfo.x;
         }
       }
     } else if (this.dragging == 1 || this.dragging == 3) {
       if (!shift) {
-        this.y = (mouseY + this.sdy + this.spy) / 2;
+        if (this.dragging == 1) {
+          this.h = -(nyP + this.dragInfo.dy) + this.dragInfo.h / 2;
 
-        if (this.dragging == 1) this.h = -(mouseY + this.sdy) + this.spy;
-        if (this.dragging == 3) this.h = mouseY + this.sdy - this.spy;
+          let s1 =
+            (this.dragInfo.bottomLeft[0] + this.dragInfo.bottomRight[0]) / 2;
+          let s2 =
+            (this.dragInfo.bottomLeft[1] + this.dragInfo.bottomRight[1]) / 2;
+
+          this.x = s1 + (sin(this.r) * this.h) / 2;
+          this.y = s2 - (cos(this.r) * this.h) / 2;
+        }
+        if (this.dragging == 3) {
+          this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
+
+          let s1 = (this.dragInfo.topLeft[0] + this.dragInfo.topRight[0]) / 2;
+          let s2 = (this.dragInfo.topLeft[1] + this.dragInfo.topRight[1]) / 2;
+
+          this.x = s1 - (sin(this.r) * this.h) / 2;
+          this.y = s2 + (cos(this.r) * this.h) / 2;
+        }
       } else {
-        if (this.dragging == 1) this.h = (-(mouseY + this.sdy) + this.scy) * 2;
-        if (this.dragging == 3) this.h = (mouseY + this.sdy - this.scy) * 2;
+        if (this.dragging == 1) this.h = -(nyP + this.dragInfo.dy) * 2;
+        if (this.dragging == 3) this.h = (nyP + this.dragInfo.dy) * 2;
       }
     } else if (this.dragging == 2 || this.dragging == 4) {
       if (!shift) {
-        this.x = (mouseX + this.sdx + this.spx) / 2;
-        if (this.dragging == 2) this.w = mouseX + this.sdx - this.spx;
-        if (this.dragging == 4) this.w = -(mouseX + this.sdx) + this.spx;
+        if (this.dragging == 2) {
+          this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+
+          let s1 = (this.dragInfo.topLeft[0] + this.dragInfo.bottomLeft[0]) / 2;
+          let s2 = (this.dragInfo.topLeft[1] + this.dragInfo.bottomLeft[1]) / 2;
+
+          this.x = s1 + (cos(this.r) * this.w) / 2;
+          this.y = s2 + (sin(this.r) * this.w) / 2;
+        }
+        if (this.dragging == 4) {
+          this.w = -(nxP + this.dragInfo.dx) + this.dragInfo.w / 2;
+
+          let s1 =
+            (this.dragInfo.topRight[0] + this.dragInfo.bottomRight[0]) / 2;
+          let s2 =
+            (this.dragInfo.topRight[1] + this.dragInfo.bottomRight[1]) / 2;
+
+          this.x = s1 - (cos(this.r) * this.w) / 2;
+          this.y = s2 - (sin(this.r) * this.w) / 2;
+        }
       } else {
-        if (this.dragging == 2) this.w = (mouseX + this.sdx - this.scx) * 2;
-        if (this.dragging == 4) this.w = (-(mouseX + this.sdx) + this.scx) * 2;
+        if (this.dragging == 2) this.w = (nxP + this.dragInfo.dx) * 2;
+        if (this.dragging == 4) this.w = -(nxP + this.dragInfo.dx) * 2;
       }
     } else if (
       this.dragging == 5 ||
@@ -142,24 +190,31 @@ class Shape {
       this.dragging == 7 ||
       this.dragging == 8
     ) {
-      this.x = (mouseX + this.sdx + this.spx) / 2;
-      this.y = (mouseY + this.sdy + this.spy) / 2;
-
       if (this.dragging == 5) {
-        this.w = mouseX + this.sdx - this.spx;
-        this.h = -(mouseY + this.sdy) + this.spy;
+        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.bottomLeft[0]) / 2;
+        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.bottomLeft[1]) / 2;
+
+        this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+        this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
+        //this.h = -(mouseY + this.sdy) + this.spy;
       }
       if (this.dragging == 6) {
-        this.w = mouseX + this.sdx - this.spx;
-        this.h = mouseY + this.sdy - this.spy;
+        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.topLeft[0]) / 2;
+        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.topLeft[1]) / 2;
+        this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+        this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
       }
       if (this.dragging == 7) {
-        this.w = -(mouseX + this.sdx) + this.spx;
-        this.h = mouseY + this.sdy - this.spy;
+        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.topRight[0]) / 2;
+        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.topRight[1]) / 2;
+        this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+        this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
       }
       if (this.dragging == 8) {
-        this.w = -(mouseX + this.sdx) + this.spx;
-        this.h = -(mouseY + this.sdy) + this.spy;
+        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.bottomRight[0]) / 2;
+        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.bottomRight[1]) / 2;
+        this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+        this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
       }
 
       if (shift) {
@@ -180,15 +235,33 @@ class Shape {
         this.x = x;
         this.y = y;
       }
+    } else if (this.dragging == 9) {
+      let x = -this.x + mouseX + this.dragInfo.dx;
+      let y = -mouseY - this.dragInfo.dy + this.y;
+
+      if (y == 0) {
+        this.r = 0;
+      } else {
+        this.r = atan(x / y);
+      }
+      if (y < 0) {
+        this.r += PI;
+      }
+      if (this.r < 0) this.r += 2 * PI;
+
+      //console.log(this.r);
     }
   }
 
   selMouseOn() {
     if (
-      mouseX > this.x - this.w / 2 - this.d / 2 &&
-      mouseX < this.x + this.w / 2 + this.d / 2 &&
-      mouseY > this.y - this.h / 2 - this.d / 2 &&
-      mouseY < this.y + this.h / 2 + this.d / 2
+      this.onRotator() ||
+      this.nposIn(
+        -this.w / 2 - this.d / 2,
+        -this.h / 2 - this.d / 2,
+        this.w / 2 + this.d / 2,
+        this.h / 2 + this.d / 2
+      )
     ) {
       return true;
     }
@@ -201,8 +274,35 @@ class Shape {
     noFill();
     stroke(255, 0, 0);
     strokeWeight(2);
-    rect(this.x, this.y, this.w, this.h);
+    translate(this.x, this.y);
+    rotate(this.r);
+    rect(0, 0, this.w, this.h);
     pop();
+  }
+
+  displayRot() {
+    let x1 = this.x + (sin(this.r) * abs(this.h)) / 2;
+    let y1 = this.y - (cos(this.r) * abs(this.h)) / 2;
+
+    let x2 = x1 + sin(this.r) * (this.rotDist - this.rotCirD / 2);
+    let y2 = y1 - cos(this.r) * (this.rotDist - this.rotCirD / 2);
+
+    let x3 = this.x + sin(this.r) * (this.rotDist + abs(this.h) / 2);
+    let y3 = this.y - cos(this.r) * (this.rotDist + abs(this.h) / 2);
+    line(x1, y1, x2, y2);
+
+    if (this.onRotator()) {
+      stroke(0, 255, 0);
+    }
+
+    ellipse(x3, y3, this.rotCirD, this.rotCirD);
+  }
+
+  onRotator() {
+    let x = this.x + sin(this.r) * (this.rotDist + abs(this.h) / 2);
+    let y = this.y - cos(this.r) * (this.rotDist + abs(this.h) / 2);
+    if (dist(mouseX, mouseY, x, y) <= this.rotCirD / 2) return true;
+    return false;
   }
 
   displaySelected() {
@@ -213,70 +313,91 @@ class Shape {
     stroke(255, 0, 0);
     strokeWeight(2);
 
-    if (this.onTopLeft())
-      rect(this.x - this.w / 2, this.y - this.h / 2, this.d, this.d);
+    if (this.onTopLeft()) {
+      push();
+      let n = this.topLeft();
+      translate(n[0], n[1]);
+      rotate(this.r);
+      rect(0, 0, this.d, this.d);
+      pop();
+    }
 
-    if (this.onBottomLeft())
-      rect(this.x - this.w / 2, this.y + this.h / 2, this.d, this.d);
+    if (this.onBottomLeft()) {
+      push();
+      let n = this.bottomLeft();
+      translate(n[0], n[1]);
+      rotate(this.r);
+      rect(0, 0, this.d, this.d);
+      pop();
+    }
 
-    if (this.onTopRight())
-      rect(this.x + this.w / 2, this.y - this.h / 2, this.d, this.d);
+    if (this.onTopRight()) {
+      push();
+      let n = this.topRight();
+      translate(n[0], n[1]);
+      rotate(this.r);
+      rect(0, 0, this.d, this.d);
+      pop();
+    }
 
-    if (this.onBottomRight())
-      rect(this.x + this.w / 2, this.y + this.h / 2, this.d, this.d);
+    if (this.onBottomRight()) {
+      push();
+      let n = this.bottomRight();
+      translate(n[0], n[1]);
+      rotate(this.r);
+      rect(0, 0, this.d, this.d);
+      pop();
+    }
 
+    this.displayRot();
     let d = this.d;
     stroke(0, 255, 0);
     strokeWeight(1);
 
     //top
     if (this.onTop()) {
-      line(
-        this.x - this.w / 2,
-        this.y - this.h / 2,
-        this.x + this.w / 2,
-        this.y - this.h / 2
-      );
+      let m = this.topLeft();
+      let n = this.topRight();
+      line(m[0], m[1], n[0], n[1]);
     }
 
     //buttom
     if (this.onBottom()) {
-      line(
-        this.x - this.w / 2,
-        this.y + this.h / 2,
-        this.x + this.w / 2,
-        this.y + this.h / 2
-      );
+      let m = this.bottomLeft();
+      let n = this.bottomRight();
+      line(m[0], m[1], n[0], n[1]);
     }
 
     //left
     if (this.onLeft()) {
-      line(
-        this.x - this.w / 2,
-        this.y - this.h / 2,
-        this.x - this.w / 2,
-        this.y + this.h / 2
-      );
+      let m = this.topLeft();
+      let n = this.bottomLeft();
+      line(m[0], m[1], n[0], n[1]);
     }
     //right
     if (this.onRight()) {
-      line(
-        this.x + this.w / 2,
-        this.y - this.h / 2,
-        this.x + this.w / 2,
-        this.y + this.h / 2
-      );
+      let m = this.bottomRight();
+      let n = this.topRight();
+      line(m[0], m[1], n[0], n[1]);
     }
     pop();
   }
 
+  nposIn(x1, y1, x2, y2) {
+    if (this.nx > x1 && this.nx < x2 && this.ny > y1 && this.ny < y2) {
+      //console.log("ons");
+      return true;
+    }
+    return false;
+  }
+
   onTop() {
     if (
-      mouseIn(
-        this.x - this.w / 2 + this.d / 2,
-        this.y - this.h / 2 - this.d / 2,
-        this.x + this.w / 2 - this.d / 2,
-        this.y - this.h / 2 + this.d / 2
+      this.nposIn(
+        -this.w / 2 + this.d / 2,
+        -this.h / 2 - this.d / 2,
+        this.w / 2 - this.d / 2,
+        -this.h / 2 + this.d / 2
       )
     ) {
       return true;
@@ -286,11 +407,11 @@ class Shape {
 
   onBottom() {
     if (
-      mouseIn(
-        this.x - this.w / 2 + this.d / 2,
-        this.y + this.h / 2 - this.d / 2,
-        this.x + this.w / 2 - this.d / 2,
-        this.y + this.h / 2 + this.d / 2
+      this.nposIn(
+        -this.w / 2 + this.d / 2,
+        this.h / 2 - this.d / 2,
+        this.w / 2 - this.d / 2,
+        this.h / 2 + this.d / 2
       )
     ) {
       return true;
@@ -300,11 +421,11 @@ class Shape {
 
   onLeft() {
     if (
-      mouseIn(
-        this.x - this.w / 2 - this.d / 2,
-        this.y - this.h / 2 + this.d / 2,
-        this.x - this.w / 2 + this.d / 2,
-        this.y + this.h / 2 - this.d / 2
+      this.nposIn(
+        -this.w / 2 - this.d / 2,
+        -this.h / 2 + this.d / 2,
+        -this.w / 2 + this.d / 2,
+        +this.h / 2 - this.d / 2
       )
     ) {
       return true;
@@ -314,11 +435,11 @@ class Shape {
 
   onRight() {
     if (
-      mouseIn(
-        this.x + this.w / 2 - this.d / 2,
-        this.y - this.h / 2 + this.d / 2,
-        this.x + this.w / 2 + this.d / 2,
-        this.y + this.h / 2 - this.d / 2
+      this.nposIn(
+        +this.w / 2 - this.d / 2,
+        -this.h / 2 + this.d / 2,
+        +this.w / 2 + this.d / 2,
+        +this.h / 2 - this.d / 2
       )
     ) {
       return true;
@@ -328,11 +449,11 @@ class Shape {
 
   onTopRight() {
     if (
-      mouseIn(
-        this.x + this.w / 2 - this.d / 2,
-        this.y - this.h / 2 - this.d / 2,
-        this.x + this.w / 2 + this.d / 2,
-        this.y - this.h / 2 + this.d / 2
+      this.nposIn(
+        +this.w / 2 - this.d / 2,
+        -this.h / 2 - this.d / 2,
+        +this.w / 2 + this.d / 2,
+        -this.h / 2 + this.d / 2
       )
     ) {
       return true;
@@ -341,11 +462,11 @@ class Shape {
   }
   onTopLeft() {
     if (
-      mouseIn(
-        this.x - this.w / 2 - this.d / 2,
-        this.y - this.h / 2 - this.d / 2,
-        this.x - this.w / 2 + this.d / 2,
-        this.y - this.h / 2 + this.d / 2
+      this.nposIn(
+        -this.w / 2 - this.d / 2,
+        -this.h / 2 - this.d / 2,
+        -this.w / 2 + this.d / 2,
+        -this.h / 2 + this.d / 2
       )
     ) {
       return true;
@@ -355,11 +476,11 @@ class Shape {
 
   onBottomRight() {
     if (
-      mouseIn(
-        this.x + this.w / 2 - this.d / 2,
-        this.y + this.h / 2 - this.d / 2,
-        this.x + this.w / 2 + this.d / 2,
-        this.y + this.h / 2 + this.d / 2
+      this.nposIn(
+        +this.w / 2 - this.d / 2,
+        +this.h / 2 - this.d / 2,
+        +this.w / 2 + this.d / 2,
+        +this.h / 2 + this.d / 2
       )
     ) {
       return true;
@@ -369,16 +490,30 @@ class Shape {
 
   onBottomLeft() {
     if (
-      mouseIn(
-        this.x - this.w / 2 - this.d / 2,
-        this.y + this.h / 2 - this.d / 2,
-        this.x - this.w / 2 + this.d / 2,
-        this.y + this.h / 2 + this.d / 2
+      this.nposIn(
+        -this.w / 2 - this.d / 2,
+        +this.h / 2 - this.d / 2,
+        -this.w / 2 + this.d / 2,
+        +this.h / 2 + this.d / 2
       )
     ) {
       return true;
     }
     return false;
+  }
+
+  peakPoints() {
+    let tl = this.topLeft();
+    let tr = this.topRight();
+    let bl = this.bottomLeft();
+    let br = this.bottomRight();
+
+    return [
+      min(tl[0], tr[0], bl[0], br[0]),
+      max(tl[0], tr[0], bl[0], br[0]),
+      min(tl[1], tr[1], bl[1], br[1]),
+      max(tl[1], tr[1], bl[1], br[1]),
+    ];
   }
 
   top() {
@@ -393,6 +528,31 @@ class Shape {
   left() {
     return this.x - this.w / 2;
   }
+
+  topRight() {
+    let x = this.x + (cos(this.r) * this.w) / 2 + (sin(this.r) * this.h) / 2;
+    let y = this.y + (sin(this.r) * this.w) / 2 - (cos(this.r) * this.h) / 2;
+    return [x, y];
+  }
+
+  topLeft() {
+    let x = this.x - (cos(this.r) * this.w) / 2 + (sin(this.r) * this.h) / 2;
+    let y = this.y - (sin(this.r) * this.w) / 2 - (cos(this.r) * this.h) / 2;
+    return [x, y];
+  }
+
+  bottomRight() {
+    let x = this.x + (cos(this.r) * this.w) / 2 - (sin(this.r) * this.h) / 2;
+    let y = this.y + (sin(this.r) * this.w) / 2 + (cos(this.r) * this.h) / 2;
+    return [x, y];
+  }
+
+  bottomLeft() {
+    let x = this.x - (cos(this.r) * this.w) / 2 - (sin(this.r) * this.h) / 2;
+    let y = this.y - (sin(this.r) * this.w) / 2 + (cos(this.r) * this.h) / 2;
+    return [x, y];
+  }
+
   centerIn(x1, y1, x2, y2) {
     let xr = max(x1, x2);
     let xl = min(x1, x2);
@@ -407,8 +567,8 @@ class Shape {
 }
 
 class Rectangle extends Shape {
-  constructor(x, y, w, h, c1, c2, sw) {
-    super(x, y, w, h, c1, c2, sw);
+  constructor(x, y, w, h, c1, c2, sw, r) {
+    super(x, y, w, h, c1, c2, sw, r);
   }
 
   copy() {
@@ -419,7 +579,8 @@ class Rectangle extends Shape {
       this.h,
       this.c1,
       this.c2,
-      this.sw
+      this.sw,
+      this.r
     );
   }
 
@@ -435,19 +596,27 @@ class Rectangle extends Shape {
     } else {
       fill(this.c1);
     }
-    rect(this.x, this.y, this.w, this.h);
+    translate(this.x, this.y);
+    rotate(this.r);
+    rect(0, 0, this.w, this.h);
     pop();
   }
 
-  mouseOn(x) {
-    if (!x) {
+  mouseOn(con) {
+    let x = mouseX - this.x;
+    let y = mouseY - this.y;
+
+    let nx = cos(this.r) * x + sin(this.r) * y;
+    let ny = -sin(this.r) * x + cos(this.r) * y;
+
+    if (!con) {
       return false;
     }
     if (
-      mouseX > this.x - this.w / 2 &&
-      mouseX < this.x + this.w / 2 &&
-      mouseY > this.y - this.h / 2 &&
-      mouseY < this.y + this.h / 2
+      nx > -this.w / 2 &&
+      nx < this.w / 2 &&
+      ny > -this.h / 2 &&
+      ny < +this.h / 2
     ) {
       return true;
     }
@@ -467,11 +636,17 @@ class Rectangle extends Shape {
     let y = floor(this.y - sy);
 
     let rect =
-      "rect(x + " +
+      "translate(x + " +
       x +
       " * scale, y + " +
       y +
-      " * scale, " +
+      " * scale);" +
+      enter +
+      "rotate(" +
+      this.r +
+      ");" +
+      enter +
+      "rect(0, 0, " +
       floor(this.w) +
       " * scale, " +
       floor(this.h) +
@@ -486,13 +661,13 @@ class Rectangle extends Shape {
       round(blue(this.c1)) +
       ");";
 
-    return fill + enter + "   " + rect;
+    return "push();" + enter + fill + enter + "   " + rect + enter + "pop();";
   }
 }
 
 class Ellipse extends Shape {
-  constructor(x, y, w, h, c1, c2, sw) {
-    super(x, y, w, h, c1, c2, sw);
+  constructor(x, y, w, h, c1, c2, sw, r) {
+    super(x, y, w, h, c1, c2, sw, r);
   }
 
   copy() {
@@ -503,7 +678,8 @@ class Ellipse extends Shape {
       this.h,
       this.c1,
       this.c2,
-      this.sw
+      this.sw,
+      this.r
     );
   }
 
@@ -516,7 +692,10 @@ class Ellipse extends Shape {
     } else {
       fill(this.c1);
     }
-    ellipse(this.x, this.y, this.w, this.h);
+
+    translate(this.x, this.y);
+    rotate(this.r);
+    ellipse(0, 0, this.w, this.h);
     pop();
   }
 
@@ -560,11 +739,17 @@ class Ellipse extends Shape {
     let y = floor(this.y - sy);
 
     let ellipse =
-      "ellipse(x + " +
+      "translate(x + " +
       x +
       " * scale, y + " +
       y +
-      " * scale, " +
+      " * scale);" +
+      enter +
+      "rotate(" +
+      this.r +
+      ");" +
+      enter +
+      "ellipse(0, 0, " +
       floor(this.w) +
       " * scale, " +
       floor(this.h) +
@@ -579,7 +764,9 @@ class Ellipse extends Shape {
       round(blue(this.c1)) +
       ");";
 
-    return fill + enter + "   " + ellipse;
+    return (
+      "push();" + enter + fill + enter + "   " + ellipse + enter + "pop();"
+    );
   }
 }
 
@@ -589,4 +776,32 @@ function mouseIn(x1, y1, x2, y2) {
     return true;
   }
   return false;
+}
+
+class ShapeDragInfo {
+  constructor(
+    x,
+    y,
+    w,
+    h,
+    r,
+    topRight,
+    bottomRight,
+    bottomLeft,
+    topLeft,
+    dx,
+    dy
+  ) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.r = r;
+    this.topRight = topRight;
+    this.bottomRight = bottomRight;
+    this.bottomLeft = bottomLeft;
+    this.topLeft = topLeft;
+    this.dx = dx;
+    this.dy = dy;
+  }
 }

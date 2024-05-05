@@ -22,7 +22,7 @@ function shapesRunAndDisplay() {
         break;
       }
     }
-    shapes[i].run();
+    //shapes[i].run();
     shapes[i].display(
       shapes[i].mouseOn(con) &&
         selShape == null &&
@@ -104,13 +104,13 @@ function processing() {
   let x = canvaX / 2;
   let y = canvaY / 2;
   let msg =
-    "void shapes (float x, float y, float scale){\n   push();\n   rectMode(CENTER);\n";
+    "void shapes (float x, float y, float scale){\n   rectMode(CENTER);\n";
 
   for (let i = 0; i < shapes.length; i++) {
-    msg += "   " + shapes[i].generatePro(x, y) + "\n";
+    msg += "   " + shapes[i].generatePro(x, y, "\n") + "\n";
   }
 
-  msg += "   pop();\n}";
+  msg += "\n}";
 
   console.log(msg);
   copyStringToClipboard(msg);
@@ -120,13 +120,13 @@ function processingMsg() {
   let x = canvaX / 2;
   let y = canvaY / 2;
   let msg =
-    "void shapes (float x, float y, float scale){<br>   push();<br>   rectMode(CENTER);<br>";
+    "void shapes (float x, float y, float scale){<br>   rectMode(CENTER);<br>";
 
   for (let i = 0; i < shapes.length; i++) {
     msg += "   " + shapes[i].generatePro(x, y, "<br>") + "<br>";
   }
 
-  msg += "   pop();<br>}<br>";
+  msg += "<br>}<br>";
 
   return msg;
 }

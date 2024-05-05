@@ -13,7 +13,9 @@ let selShape;
 let selX;
 let selY;
 let selecting = false;
-//let center;
+//let center;\y
+
+let p;
 
 function setup() {
   createCanvas(900, 750);
@@ -21,10 +23,12 @@ function setup() {
   colorPicker = new ColorPicker(60, height - 60, 100);
   creator = new CreatingShapes();
   aboutShapes = new AboutShapes(20, canvaY + 30);
-  layers = new Layer(canvaX, 100, width - canvaX, 500);
+  layers = new Layer(canvaX, 100, width - canvaX, 480);
 
   colorPicker.render();
   colorPicker.render();
+
+  //p = createP("hello");
 }
 
 function draw() {

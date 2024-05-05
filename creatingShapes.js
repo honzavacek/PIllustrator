@@ -82,9 +82,9 @@ class CreatingShapes {
 
       if (w != 0 && h != 0) {
         if (this.rectB.switch) {
-          shapes.push(new Rectangle(x, y, w, h, colorPicker.c, color(0), 1));
+          shapes.push(new Rectangle(x, y, w, h, colorPicker.c, color(0), 1, 0));
         } else if (this.ellipB.switch) {
-          shapes.push(new Ellipse(x, y, w, h, colorPicker.c, color(0), 1));
+          shapes.push(new Ellipse(x, y, w, h, colorPicker.c, color(0), 1, 0));
         }
       }
     }

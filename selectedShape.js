@@ -1,17 +1,24 @@
 class SelectedShape extends Shape {
   constructor(arr) {
-    let t = shapes[arr[0]].top();
-    let b = shapes[arr[0]].bottom();
-    let r = shapes[arr[0]].right();
-    let l = shapes[arr[0]].left();
+    let [l, r, t, b] = shapes[arr[0]].peakPoints();
+
     for (let i = 0; i < arr.length; i++) {
-      if (shapes[arr[i]].top() < t) t = shapes[arr[i]].top();
-      if (shapes[arr[i]].bottom() > b) b = shapes[arr[i]].bottom();
-      if (shapes[arr[i]].left() < l) l = shapes[arr[i]].left();
-      if (shapes[arr[i]].right() > r) r = shapes[arr[i]].right();
+      let [l1, r1, t1, b1] = shapes[arr[i]].peakPoints();
+
+      if (t1 < t) t = t1;
+      if (b1 > b) b = b1;
+      if (l1 < l) l = l1;
+      if (r1 > r) r = r1;
     }
 
-    super((r + l) / 2, (t + b) / 2, r - l, b - t, color(0), color(0), 1);
+    if (arr.length == 1) {
+      l = shapes[arr[0]].left();
+      r = shapes[arr[0]].right();
+      t = shapes[arr[0]].top();
+      b = shapes[arr[0]].bottom();
+    }
+
+    super((r + l) / 2, (t + b) / 2, r - l, b - t, color(0), color(0), 1, 0);
 
     this.infos = [];
 
@@ -20,7 +27,13 @@ class SelectedShape extends Shape {
       let ky = (shapes[arr[i]].y - this.y) / this.h;
       let kw = shapes[arr[i]].w / this.w;
       let kh = shapes[arr[i]].h / this.h;
-      this.infos.push(new Info(arr[i], kx, ky, kw, kh));
+
+      this.infos.push(new Info(arr[i], kx, ky, kw, kh, shapes[arr[i]].r));
+    }
+
+    if (this.infos.length == 1) {
+      this.r = shapes[this.infos[0].index].r;
+      this.infos[0].r = 0;
     }
   }
 
@@ -52,10 +65,17 @@ class SelectedShape extends Shape {
     super.run();
 
     for (let i = 0; i < this.infos.length; i++) {
-      shapes[this.infos[i].index].x = this.x + this.infos[i].kx * this.w;
-      shapes[this.infos[i].index].y = this.y + this.infos[i].ky * this.h;
+      shapes[this.infos[i].index].x =
+        this.x +
+        cos(this.r) * this.infos[i].kx * this.w +
+        -sin(this.r) * this.infos[i].ky * this.h;
+      shapes[this.infos[i].index].y =
+        this.y +
+        cos(this.r) * this.infos[i].ky * this.h +
+        sin(this.r) * this.infos[i].kx * this.w;
       shapes[this.infos[i].index].w = this.infos[i].kw * this.w;
       shapes[this.infos[i].index].h = this.infos[i].kh * this.h;
+      shapes[this.infos[i].index].r = this.infos[i].r + this.r;
     }
     //}
 
@@ -85,11 +105,12 @@ class SelectedShape extends Shape {
 }
 
 class Info {
-  constructor(index, kx, ky, kw, kh) {
+  constructor(index, kx, ky, kw, kh, r) {
     this.index = index;
     this.kx = kx;
     this.ky = ky;
     this.kw = kw;
     this.kh = kh;
+    this.r = r;
   }
 }
