@@ -1,0 +1,23 @@
+{
+  "name": "pillustrator",
+  "version": "1.0.0",
+  "description": "In this web application you can create new shapes and models, and use them in your processing code.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/honzavacek/PIllustrator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/honzavacek/PIllustrator/issues"
+  },
+  "homepage": "https://github.com/honzavacek/PIllustrator#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3"
+  }
+}

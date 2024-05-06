@@ -34,6 +34,7 @@ class SelectedShape extends Shape {
     if (this.infos.length == 1) {
       this.r = shapes[this.infos[0].index].r;
       this.infos[0].r = 0;
+      this.c1 = shapes[this.infos[0].index].c1;
     }
   }
 

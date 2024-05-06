@@ -1,0 +1,11 @@
+@import "./node_modules/bootstrap/scss/bootstrap";
+@import "./node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+body {
+    padding: 20px;
+}
+
+.pre-scrollable {
+    max-height: 340px;
+    overflow-y: scroll;
+}

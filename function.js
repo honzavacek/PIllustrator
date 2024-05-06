@@ -126,7 +126,7 @@ function processingMsg() {
     msg += "   " + shapes[i].generatePro(x, y, "<br>") + "<br>";
   }
 
-  msg += "<br>}<br>";
+  msg += "}<br>";
 
   return msg;
 }

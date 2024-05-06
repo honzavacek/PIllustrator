@@ -564,6 +564,52 @@ class Shape {
     }
     return false;
   }
+
+  generatePro(sx, sy, enter, what) {
+    let x = floor(this.x - sx);
+    let y = floor(this.y - sy);
+
+    let obj =
+      "translate(x + " +
+      x +
+      " * scale, y + " +
+      y +
+      " * scale);" +
+      enter +
+      "   " +
+      "rotate(" +
+      this.r +
+      ");" +
+      enter +
+      "   " +
+      what +
+      "(0, 0, " +
+      floor(this.w) +
+      " * scale, " +
+      floor(this.h) +
+      " * scale);";
+
+    let fill =
+      "fill(" +
+      round(red(this.c1)) +
+      ", " +
+      round(green(this.c1)) +
+      ", " +
+      round(blue(this.c1)) +
+      ");";
+
+    return (
+      "push();" +
+      enter +
+      "   " +
+      fill +
+      enter +
+      "   " +
+      obj +
+      enter +
+      "   pop();"
+    );
+  }
 }
 
 class Rectangle extends Shape {
@@ -632,36 +678,7 @@ class Rectangle extends Shape {
   }
 
   generatePro(sx, sy, enter) {
-    let x = floor(this.x - sx);
-    let y = floor(this.y - sy);
-
-    let rect =
-      "translate(x + " +
-      x +
-      " * scale, y + " +
-      y +
-      " * scale);" +
-      enter +
-      "rotate(" +
-      this.r +
-      ");" +
-      enter +
-      "rect(0, 0, " +
-      floor(this.w) +
-      " * scale, " +
-      floor(this.h) +
-      " * scale);";
-
-    let fill =
-      "fill(" +
-      round(red(this.c1)) +
-      ", " +
-      round(green(this.c1)) +
-      ", " +
-      round(blue(this.c1)) +
-      ");";
-
-    return "push();" + enter + fill + enter + "   " + rect + enter + "pop();";
+    return super.generatePro(sx, sy, enter, "rect");
   }
 }
 
@@ -734,39 +751,8 @@ class Ellipse extends Shape {
     return false;
   }
 
-  generatePro(sx, sy, enter) {
-    let x = floor(this.x - sx);
-    let y = floor(this.y - sy);
-
-    let ellipse =
-      "translate(x + " +
-      x +
-      " * scale, y + " +
-      y +
-      " * scale);" +
-      enter +
-      "rotate(" +
-      this.r +
-      ");" +
-      enter +
-      "ellipse(0, 0, " +
-      floor(this.w) +
-      " * scale, " +
-      floor(this.h) +
-      " * scale);";
-
-    let fill =
-      "fill(" +
-      round(red(this.c1)) +
-      ", " +
-      round(green(this.c1)) +
-      ", " +
-      round(blue(this.c1)) +
-      ");";
-
-    return (
-      "push();" + enter + fill + enter + "   " + ellipse + enter + "pop();"
-    );
+  generatePro(sx, sy, enter, what) {
+    return super.generatePro(sx, sy, enter, "ellipse");
   }
 }
 

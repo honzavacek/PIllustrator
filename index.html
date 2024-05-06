@@ -1,53 +1,60 @@
 <!DOCTYPE html>
-<html lang = "en">
-<head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="index.css">
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css"> -->
+
+  <link rel="stylesheet" href="main.css">
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
+
 <body>
 
-
-
-    <div class="row row-cols-auto">
-      <div class="col">
-        <main>
-        </main>
+  <h2 >PILLUSTRATOR</h2>
+  <div class="row row-cols-auto">
+    <div class="col">
+      <main class="border">
+      </main>
+    </div>
+    <div class="col">
+      <ul class="list-group">
+        <li class="list-group-item"><kbd>C</kbd> - copy selected objects</li>
+        <li class="list-group-item"><kbd><i class="bi bi-backspace"></i></kbd> - delete selected objects</li>
+        <li class="list-group-item"><kbd>R</kbd> - rectangle</li>
+        <li class="list-group-item"><kbd>E</kbd> - ellipse</li>
+        <li class="list-group-item"><kbd>S</kbd> - select</li>
+        <li class="list-group-item"><kbd>G</kbd> - generate function to dashboard</li>
+      </ul>
+      <p></p>
+      <div class="border">
+        <pre class="pre-scrollable p-3" id="fnc">hello</pre>
       </div>
-      <div class="col">
-        <p>c - copy selected objects</p>
-        <p>backspace - delete selected objects</p>
-        <p>r - rectangle</p>
-        <p>e - ellipse</p>
-        <p>s - select</p>
-        <p>g - generate function to dashboard</p>
-        <p></p>
-        <p id="fnc">hello</p>
-      </div>
+
     </div>
 
-      
-    
-    
+
     <a href="https://github.com/honzavacek/PIllustrator.git">GitHub</a>
 
+  </div>
+  <script src="sketch.js"></script>
+  <script src="shapes.js"></script>
+  <script src="slider.js"></script>
+  <script src="colorPicker.js"></script>
+  <script src="button.js"></script>
+  <script src="creatingShapes.js"></script>
+  <script src="aboutShapes.js"></script>
+  <script src="layer.js"></script>
+  <script src="selectedShape.js"></script>
+  <script src="function.js"></script>
 
-    <script src="sketch.js"></script>
-    <script src="shapes.js"></script>
-    <script src="slider.js"></script>
-    <script src="colorPicker.js"></script>
-    <script src="button.js"></script>
-    <script src="creatingShapes.js"></script>
-    <script src="aboutShapes.js"></script>
-    <script src="layer.js"></script>
-    <script src="selectedShape.js"></script>
-    <script src="function.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</div>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
+  </div>
 </body>
+
 </html>
