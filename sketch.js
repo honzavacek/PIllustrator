@@ -9,6 +9,8 @@ let canvaX = 730;
 let canvaY = 580;
 let layers;
 
+let ctrl = false;
+
 let selShape;
 let selX;
 let selY;
@@ -84,6 +86,10 @@ function keyPressed() {
   if (keyCode == SHIFT) {
     shift = true;
   }
+
+  if (keyCode == CONTROL) {
+    ctrl = true;
+  }
   if (key == "g") {
     processing();
   }
@@ -113,6 +119,11 @@ function keyReleased() {
   if (keyCode == SHIFT) {
     if (shift) {
       shift = false;
+    }
+  }
+  if (keyCode == CONTROL) {
+    if (ctrl) {
+      ctrl = false;
     }
   }
 }

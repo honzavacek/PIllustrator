@@ -23,7 +23,7 @@ class SelectedShape extends Shape {
     this.infos = [];
 
     for (let i = 0; i < arr.length; i++) {
-      let kx = (shapes[arr[i]].x - this.x) / this.w;
+      let kx = (shapes[arr[i]].x - this.x) / this.w; // (this.w * cos(this.infos[i].r) + this.h * sin(this.infos[i].r));;
       let ky = (shapes[arr[i]].y - this.y) / this.h;
       let kw = shapes[arr[i]].w / this.w;
       let kh = shapes[arr[i]].h / this.h;
@@ -65,6 +65,21 @@ class SelectedShape extends Shape {
   run() {
     super.run();
 
+    if (this.dragging == -1 && !aboutShapes.changing()) {
+      if (this.w < 0) {
+        for (let i = 0; i < this.infos.length; i++) {
+          this.infos[i].kx *= -1;
+        }
+        this.w *= -1;
+      }
+      if (this.h < 0) {
+        for (let i = 0; i < this.infos.length; i++) {
+          this.infos[i].ky *= -1;
+        }
+        this.h *= -1;
+      }
+    }
+
     for (let i = 0; i < this.infos.length; i++) {
       shapes[this.infos[i].index].x =
         this.x +
@@ -74,8 +89,11 @@ class SelectedShape extends Shape {
         this.y +
         cos(this.r) * this.infos[i].ky * this.h +
         sin(this.r) * this.infos[i].kx * this.w;
+
       shapes[this.infos[i].index].w = this.infos[i].kw * this.w;
+      //(this.w * cos(this.infos[i].r) + this.h * sin(this.infos[i].r));
       shapes[this.infos[i].index].h = this.infos[i].kh * this.h;
+      //(this.w * sin(this.infos[i].r) + this.h * cos(this.infos[i].r));
       shapes[this.infos[i].index].r = this.infos[i].r + this.r;
     }
     //}
@@ -86,21 +104,6 @@ class SelectedShape extends Shape {
   }
 
   stopDragging() {
-    if (this.w < 0) {
-      for (let i = 0; i < this.infos.length; i++) {
-        this.infos[i].kx *= -1;
-      }
-      this.w *= -1;
-    }
-    if (this.h < 0) {
-      for (let i = 0; i < this.infos.length; i++) {
-        this.infos[i].ky *= -1;
-      }
-      this.h *= -1;
-    }
-
-    this.sdx = 0;
-    this.sdy = 0;
     this.dragging = -1;
   }
 }

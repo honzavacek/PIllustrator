@@ -7,6 +7,7 @@ class AboutShapes {
     this.niy = new NumberInput(this.x + 155, this.y - 5, 50, 25);
     this.niw = new NumberInput(this.x + 255, this.y - 5, 50, 25);
     this.nih = new NumberInput(this.x + 355, this.y - 5, 50, 25);
+    this.nir = new NumberInput(this.x + 455, this.y - 5, 50, 25);
 
     this.sp = selected;
   }
@@ -24,16 +25,34 @@ class AboutShapes {
         this.niy.setValue(selShape.y);
       }
       if (this.niw.changing) {
-        selShape.w = abs(this.niw.getValue());
+        selShape.w = this.niw.getValue();
       } else {
         this.niw.setValue(selShape.w);
       }
       if (this.nih.changing) {
-        selShape.h = abs(this.nih.getValue());
+        selShape.h = this.nih.getValue();
       } else {
         this.nih.setValue(selShape.h);
       }
+      if (this.nir.changing) {
+        selShape.r = (PI / 180) * this.nir.getValue();
+      } else {
+        this.nir.setValue(selShape.r * (180 / PI));
+      }
     }
+  }
+
+  changing() {
+    if (
+      this.nix.changing ||
+      this.niy.changing ||
+      this.niw.changing ||
+      this.nih.changing ||
+      this.nir.changing
+    ) {
+      return true;
+    }
+    return false;
   }
 
   display() {
@@ -55,6 +74,8 @@ class AboutShapes {
       this.niw.display();
       text("h = ", this.x + 300, this.y);
       this.nih.display();
+      text("r = ", this.x + 400, this.y);
+      this.nir.display();
 
       //text("y = " + round(shapes[selected].y), this.x + 100, this.y);
       //text("w = " + shapes[selected].w, this.x + 200, this.y);
@@ -70,6 +91,7 @@ class AboutShapes {
     this.niy.mouseP();
     this.niw.mouseP();
     this.nih.mouseP();
+    this.nir.mouseP();
   }
 
   mouseR() {
@@ -77,6 +99,7 @@ class AboutShapes {
     this.niy.mouseR();
     this.niw.mouseR();
     this.nih.mouseR();
+    this.nir.mouseR();
   }
 }
 

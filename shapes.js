@@ -97,6 +97,13 @@ class Shape {
   }
 
   run() {
+    if (this.r < 0) {
+      this.r += 2 * PI;
+    }
+    if (this.r > 2 * PI) {
+      this.r -= 2 * PI;
+    }
+
     let nxP;
     let nyP;
 
@@ -190,50 +197,195 @@ class Shape {
       this.dragging == 7 ||
       this.dragging == 8
     ) {
-      if (this.dragging == 5) {
-        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.bottomLeft[0]) / 2;
-        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.bottomLeft[1]) / 2;
+      if (!shift && !ctrl) {
+        if (this.dragging == 5) {
+          this.x =
+            (mouseX + this.dragInfo.dx + this.dragInfo.bottomLeft[0]) / 2;
+          this.y =
+            (mouseY + this.dragInfo.dy + this.dragInfo.bottomLeft[1]) / 2;
 
-        this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
-        this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
-        //this.h = -(mouseY + this.sdy) + this.spy;
-      }
-      if (this.dragging == 6) {
-        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.topLeft[0]) / 2;
-        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.topLeft[1]) / 2;
-        this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
-        this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
-      }
-      if (this.dragging == 7) {
-        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.topRight[0]) / 2;
-        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.topRight[1]) / 2;
-        this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
-        this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
-      }
-      if (this.dragging == 8) {
-        this.x = (mouseX + this.dragInfo.dx + this.dragInfo.bottomRight[0]) / 2;
-        this.y = (mouseY + this.dragInfo.dy + this.dragInfo.bottomRight[1]) / 2;
-        this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
-        this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
-      }
+          this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
+        }
+        if (this.dragging == 6) {
+          this.x = (mouseX + this.dragInfo.dx + this.dragInfo.topLeft[0]) / 2;
+          this.y = (mouseY + this.dragInfo.dy + this.dragInfo.topLeft[1]) / 2;
+          this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
+        }
+        if (this.dragging == 7) {
+          this.x = (mouseX + this.dragInfo.dx + this.dragInfo.topRight[0]) / 2;
+          this.y = (mouseY + this.dragInfo.dy + this.dragInfo.topRight[1]) / 2;
+          this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
+        }
+        if (this.dragging == 8) {
+          this.x =
+            (mouseX + this.dragInfo.dx + this.dragInfo.bottomRight[0]) / 2;
+          this.y =
+            (mouseY + this.dragInfo.dy + this.dragInfo.bottomRight[1]) / 2;
+          this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
+        }
+      } else if (shift) {
+        if (this.dragging == 5) {
+          this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
 
-      if (shift) {
-        if (abs(this.w) > abs(this.h)) {
-          this.h = (abs(this.w) * this.h) / abs(this.h);
-        } else {
-          this.w = (abs(this.h) * this.w) / abs(this.w);
+          if (abs(this.w) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h);
+          } else {
+            this.w = (abs(this.h) * this.w) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.bottomLeft[0] +
+            (cos(this.r) * this.w) / 2 +
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.bottomLeft[1] +
+            (sin(this.r) * this.w) / 2 -
+            (cos(this.r) * this.h) / 2;
         }
 
-        let x, y, w, h;
-        [x, y, w, h] = getXYWH(
-          this.spx,
-          this.spy,
-          mouseX + this.sdx,
-          mouseY + this.sdy
-        );
+        if (this.dragging == 6) {
+          this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
 
-        this.x = x;
-        this.y = y;
+          if (abs(this.w) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h);
+          } else {
+            this.w = (abs(this.h) * this.w) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.topLeft[0] +
+            (cos(this.r) * this.w) / 2 -
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.topLeft[1] +
+            (sin(this.r) * this.w) / 2 +
+            (cos(this.r) * this.h) / 2;
+        }
+
+        if (this.dragging == 7) {
+          this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
+
+          if (abs(this.w) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h);
+          } else {
+            this.w = (abs(this.h) * this.w) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.topRight[0] -
+            (cos(this.r) * this.w) / 2 -
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.topRight[1] -
+            (sin(this.r) * this.w) / 2 +
+            (cos(this.r) * this.h) / 2;
+        }
+
+        if (this.dragging == 8) {
+          this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
+
+          if (abs(this.w) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h);
+          } else {
+            this.w = (abs(this.h) * this.w) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.bottomRight[0] -
+            (cos(this.r) * this.w) / 2 +
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.bottomRight[1] -
+            (sin(this.r) * this.w) / 2 -
+            (cos(this.r) * this.h) / 2;
+        }
+      } else if (ctrl) {
+        if (this.dragging == 5) {
+          this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
+
+          if (abs(this.w / this.dragInfo.wh) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h) / this.dragInfo.wh;
+          } else {
+            this.w = (this.dragInfo.wh * (abs(this.h) * this.w)) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.bottomLeft[0] +
+            (cos(this.r) * this.w) / 2 +
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.bottomLeft[1] +
+            (sin(this.r) * this.w) / 2 -
+            (cos(this.r) * this.h) / 2;
+        }
+        if (this.dragging == 6) {
+          this.w = nxP + this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
+
+          if (abs(this.w / this.dragInfo.wh) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h) / this.dragInfo.wh;
+          } else {
+            this.w = (this.dragInfo.wh * (abs(this.h) * this.w)) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.topLeft[0] +
+            (cos(this.r) * this.w) / 2 -
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.topLeft[1] +
+            (sin(this.r) * this.w) / 2 +
+            (cos(this.r) * this.h) / 2;
+        }
+
+        if (this.dragging == 7) {
+          this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = nyP + this.dragInfo.dy + this.dragInfo.h / 2;
+
+          if (abs(this.w / this.dragInfo.wh) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h) / this.dragInfo.wh;
+          } else {
+            this.w = (this.dragInfo.wh * (abs(this.h) * this.w)) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.topRight[0] -
+            (cos(this.r) * this.w) / 2 -
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.topRight[1] -
+            (sin(this.r) * this.w) / 2 +
+            (cos(this.r) * this.h) / 2;
+        }
+
+        if (this.dragging == 8) {
+          this.w = -nxP - this.dragInfo.dx + this.dragInfo.w / 2;
+          this.h = -nyP - this.dragInfo.dy + this.dragInfo.h / 2;
+
+          if (abs(this.w / this.dragInfo.wh) > abs(this.h)) {
+            this.h = (abs(this.w) * this.h) / abs(this.h) / this.dragInfo.wh;
+          } else {
+            this.w = (this.dragInfo.wh * (abs(this.h) * this.w)) / abs(this.w);
+          }
+
+          this.x =
+            this.dragInfo.bottomRight[0] -
+            (cos(this.r) * this.w) / 2 +
+            (sin(this.r) * this.h) / 2;
+          this.y =
+            this.dragInfo.bottomRight[1] -
+            (sin(this.r) * this.w) / 2 -
+            (cos(this.r) * this.h) / 2;
+        }
       }
     } else if (this.dragging == 9) {
       let x = -this.x + mouseX + this.dragInfo.dx;
@@ -789,5 +941,6 @@ class ShapeDragInfo {
     this.topLeft = topLeft;
     this.dx = dx;
     this.dy = dy;
+    this.wh = w / h;
   }
 }
