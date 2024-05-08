@@ -421,15 +421,15 @@ class Shape {
   }
 
   selRect() {
-    push();
-    rectMode(CENTER);
-    noFill();
-    stroke(255, 0, 0);
-    strokeWeight(2);
-    translate(this.x, this.y);
-    rotate(this.r);
-    rect(0, 0, this.w, this.h);
-    pop();
+    cv.push();
+    cv.rectMode(CENTER);
+    cv.noFill();
+    cv.stroke(255, 0, 0);
+    cv.strokeWeight(2);
+    cv.translate(this.x, this.y);
+    cv.rotate(this.r);
+    cv.rect(0, 0, this.w, this.h);
+    cv.pop();
   }
 
   displayRot() {
@@ -441,13 +441,13 @@ class Shape {
 
     let x3 = this.x + sin(this.r) * (this.rotDist + abs(this.h) / 2);
     let y3 = this.y - cos(this.r) * (this.rotDist + abs(this.h) / 2);
-    line(x1, y1, x2, y2);
+    cv.line(x1, y1, x2, y2);
 
     if (this.onRotator()) {
-      stroke(0, 255, 0);
+      cv.stroke(0, 255, 0);
     }
 
-    ellipse(x3, y3, this.rotCirD, this.rotCirD);
+    cv.ellipse(x3, y3, this.rotCirD, this.rotCirD);
   }
 
   onRotator() {
@@ -458,81 +458,81 @@ class Shape {
   }
 
   displaySelected() {
-    push();
+    cv.push();
     this.selRect();
-    rectMode(CENTER);
-    noFill();
-    stroke(255, 0, 0);
-    strokeWeight(2);
+    cv.rectMode(CENTER);
+    cv.noFill();
+    cv.stroke(255, 0, 0);
+    cv.strokeWeight(2);
 
     if (this.onTopLeft()) {
-      push();
+      cv.push();
       let n = this.topLeft();
-      translate(n[0], n[1]);
-      rotate(this.r);
-      rect(0, 0, this.d, this.d);
-      pop();
+      cv.translate(n[0], n[1]);
+      cv.rotate(this.r);
+      cv.rect(0, 0, this.d, this.d);
+      cv.pop();
     }
 
     if (this.onBottomLeft()) {
-      push();
+      cv.push();
       let n = this.bottomLeft();
-      translate(n[0], n[1]);
-      rotate(this.r);
-      rect(0, 0, this.d, this.d);
-      pop();
+      cv.translate(n[0], n[1]);
+      cv.rotate(this.r);
+      cv.rect(0, 0, this.d, this.d);
+      cv.pop();
     }
 
     if (this.onTopRight()) {
-      push();
+      cv.push();
       let n = this.topRight();
-      translate(n[0], n[1]);
-      rotate(this.r);
-      rect(0, 0, this.d, this.d);
-      pop();
+      cv.translate(n[0], n[1]);
+      cv.rotate(this.r);
+      cv.rect(0, 0, this.d, this.d);
+      cv.pop();
     }
 
     if (this.onBottomRight()) {
-      push();
+      cv.push();
       let n = this.bottomRight();
-      translate(n[0], n[1]);
-      rotate(this.r);
-      rect(0, 0, this.d, this.d);
-      pop();
+      cv.translate(n[0], n[1]);
+      cv.rotate(this.r);
+      cv.rect(0, 0, this.d, this.d);
+      cv.pop();
     }
 
     this.displayRot();
     let d = this.d;
-    stroke(0, 255, 0);
-    strokeWeight(1);
+    cv.stroke(0, 255, 0);
+    cv.strokeWeight(1);
 
     //top
     if (this.onTop()) {
       let m = this.topLeft();
       let n = this.topRight();
-      line(m[0], m[1], n[0], n[1]);
+      cv.line(m[0], m[1], n[0], n[1]);
     }
 
     //buttom
     if (this.onBottom()) {
       let m = this.bottomLeft();
       let n = this.bottomRight();
-      line(m[0], m[1], n[0], n[1]);
+      cv.line(m[0], m[1], n[0], n[1]);
     }
 
     //left
     if (this.onLeft()) {
       let m = this.topLeft();
       let n = this.bottomLeft();
-      line(m[0], m[1], n[0], n[1]);
+      cv.line(m[0], m[1], n[0], n[1]);
     }
     //right
     if (this.onRight()) {
       let m = this.bottomRight();
       let n = this.topRight();
-      line(m[0], m[1], n[0], n[1]);
+      cv.line(m[0], m[1], n[0], n[1]);
     }
-    pop();
+    cv.pop();
   }
 
   nposIn(x1, y1, x2, y2) {
@@ -783,21 +783,21 @@ class Rectangle extends Shape {
   }
 
   display(on) {
-    push();
-    rectMode(CENTER);
-    stroke(this.c2);
+    cv.push();
+    cv.rectMode(CENTER);
+    cv.stroke(this.c2);
 
-    strokeWeight(this.sw);
+    cv.strokeWeight(this.sw);
 
     if (on) {
-      fill(red(this.c1) - 30, green(this.c1) - 30, blue(this.c1) - 30);
+      cv.fill(red(this.c1) - 30, green(this.c1) - 30, blue(this.c1) - 30);
     } else {
-      fill(this.c1);
+      cv.fill(this.c1);
     }
-    translate(this.x, this.y);
-    rotate(this.r);
-    rect(0, 0, this.w, this.h);
-    pop();
+    cv.translate(this.x, this.y);
+    cv.rotate(this.r);
+    cv.rect(0, 0, this.w, this.h);
+    cv.pop();
   }
 
   mouseOn(con) {
@@ -853,19 +853,19 @@ class Ellipse extends Shape {
   }
 
   display(on) {
-    push();
-    stroke(this.c2);
-    strokeWeight(this.sw);
+    cv.push();
+    cv.stroke(this.c2);
+    cv.strokeWeight(this.sw);
     if (on) {
-      fill(red(this.c1) - 30, green(this.c1) - 30, blue(this.c1) - 30);
+      cv.fill(red(this.c1) - 30, green(this.c1) - 30, blue(this.c1) - 30);
     } else {
-      fill(this.c1);
+      cv.fill(this.c1);
     }
 
-    translate(this.x, this.y);
-    rotate(this.r);
-    ellipse(0, 0, this.w, this.h);
-    pop();
+    cv.translate(this.x, this.y);
+    cv.rotate(this.r);
+    cv.ellipse(0, 0, this.w, this.h);
+    cv.pop();
   }
 
   lDisplay(x, y, w, h) {
@@ -894,8 +894,18 @@ class Ellipse extends Shape {
     }
 
     if (
-      dist(mouseX, mouseY, this.x - fx, this.y - fy) +
-        dist(mouseX, mouseY, this.x + fx, this.y + fy) <=
+      dist(
+        mouseX,
+        mouseY,
+        this.x - fx * cos(this.r) + fy * sin(this.r),
+        this.y - fy * cos(this.r) - fx * sin(this.r)
+      ) +
+        dist(
+          mouseX,
+          mouseY,
+          this.x + fx * cos(this.r) - fy * sin(this.r),
+          this.y + fy * cos(this.r) + fx * sin(this.r)
+        ) <=
       m
     ) {
       return true;

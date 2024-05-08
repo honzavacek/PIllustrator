@@ -15,12 +15,15 @@ let selShape;
 let selX;
 let selY;
 let selecting = false;
-//let center;\y
+
+let cv;
 
 let p;
 
 function setup() {
   createCanvas(900, 750);
+
+  cv = createGraphics(canvaX, canvaY);
 
   colorPicker = new ColorPicker(60, height - 60, 100);
   creator = new CreatingShapes();
@@ -34,8 +37,8 @@ function setup() {
 }
 
 function draw() {
-  canvaBackground();
-
+  //canvaBackground();
+  cv.background(255);
   aboutShapes.run();
   if (selShape != null) {
     selShape.run();
@@ -47,20 +50,23 @@ function draw() {
   layers.display();
   aboutShapes.display();
 
-  fill(0);
-  ellipse(canvaX / 2, canvaY / 2, 5, 5);
-
   if (selecting) {
-    push();
-    rectMode(CORNER);
-    fill(200, 100);
-    rect(selX, selY, mouseX - selX, mouseY - selY);
-    pop();
+    cv.push();
+    cv.rectMode(CORNER);
+    cv.fill(200, 100);
+    cv.rect(selX, selY, mouseX - selX, mouseY - selY);
+    cv.pop();
   }
 
   if (selShape != null) {
     selShape.displaySelected();
   }
+  image(cv, 0, 0);
+
+  fill(0);
+  ellipse(canvaX / 2, canvaY / 2, 5, 5);
+  noFill();
+  rect(0, 0, canvaX, canvaY);
 
   let elem = select("#fnc");
   elem.html(processingMsg());

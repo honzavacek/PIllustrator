@@ -40,15 +40,16 @@ class CreatingShapes {
     this.seleB.display();
 
     if (this.isCreating) {
-      noFill();
+      cv.noFill();
 
       let x, y, w, h;
       [x, y, w, h] = getXYWH(this.sx, this.sy, mouseX, mouseY);
 
       if (this.rectB.switch) {
-        rect(x, y, w, h);
+        cv.rectMode(CENTER);
+        cv.rect(x, y, w, h);
       } else if (this.ellipB.switch) {
-        ellipse(x, y, w, h);
+        cv.ellipse(x, y, w, h);
       }
     }
     pop();

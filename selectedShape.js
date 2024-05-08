@@ -53,11 +53,11 @@ class SelectedShape extends Shape {
   }
 
   displaySelected() {
-    push();
+    cv.push();
     for (let i = 0; i < this.infos.length; i++) {
       shapes[this.infos[i].index].selRect();
     }
-    pop();
+    cv.pop();
 
     super.displaySelected();
   }
