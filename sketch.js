@@ -34,6 +34,8 @@ function setup() {
   colorPicker.render();
 
   //p = createP("hello");
+  let button = select("#copyb");
+  button.mouseClicked(processing);
 }
 
 function draw() {

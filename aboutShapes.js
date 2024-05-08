@@ -15,14 +15,14 @@ class AboutShapes {
   run() {
     if (selShape != null) {
       if (this.nix.changing) {
-        selShape.x = this.nix.getValue();
+        selShape.x = this.nix.getValue() + canvaX / 2;
       } else {
-        this.nix.setValue(selShape.x);
+        this.nix.setValue(selShape.x - canvaX / 2);
       }
       if (this.niy.changing) {
-        selShape.y = this.niy.getValue();
+        selShape.y = this.niy.getValue() + canvaY / 2;
       } else {
-        this.niy.setValue(selShape.y);
+        this.niy.setValue(selShape.y - canvaY / 2);
       }
       if (this.niw.changing) {
         selShape.w = this.niw.getValue();
@@ -80,6 +80,12 @@ class AboutShapes {
       //text("y = " + round(shapes[selected].y), this.x + 100, this.y);
       //text("w = " + shapes[selected].w, this.x + 200, this.y);
       //text("h = " + shapes[selected].h, this.x + 300, this.y);
+      pop();
+    } else {
+      push();
+      fill(255);
+      noStroke();
+      rect(this.x - 20, this.y - 25, 510, 40);
       pop();
     }
 
