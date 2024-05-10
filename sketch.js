@@ -20,6 +20,8 @@ let cv;
 
 let p;
 
+let con = 0;
+
 function setup() {
   createCanvas(900, 750);
 
@@ -70,8 +72,25 @@ function draw() {
   noFill();
   rect(0, 0, canvaX, canvaY);
 
-  let elem = select("#fnc");
-  elem.html(processingMsg());
+  let elemPro = select("#fncPro");
+  elemPro.html(processingMsg(0));
+
+  let elemP5 = select("#fncP5");
+  elemP5.html(processingMsg(1));
+
+  let proTab = select("#pro-tab");
+  proTab.mousePressed(fPro);
+
+  let p5Tab = select("#p5-tab");
+  p5Tab.mousePressed(fP5);
+}
+
+function fPro() {
+  con = 0;
+}
+
+function fP5() {
+  con = 1;
 }
 
 function mousePressed() {

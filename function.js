@@ -100,33 +100,69 @@ function shapesMouseR() {
   }
 }
 
+// function processing(i) {
+//   let x = canvaX / 2;
+//   let sy = canvaY / 2;
+
+//   if (i == null) {
+//     console.log("is");
+//   }
+
+//   let msg;
+//   if (i == 0) {
+//     msg =
+//       "void shapes (float x, float y, float scale){\n   rectMode(CENTER);\n";
+//   } else if (i == 1) {
+//     msg = "function shapes (x, y, scale){\n   rectMode(CENTER);\n";
+//   }
+
+//   for (let i = 0; i < shapes.length; i++) {
+//     msg += "   " + shapes[i].generatePro(x, y, "\n") + "\n";
+//   }
+
+//   msg += "}";
+
+//   console.log(msg);
+//   copyStringToClipboard(msg);
+// }
+
 function processing() {
   let x = canvaX / 2;
   let y = canvaY / 2;
-  let msg =
-    "void shapes (float x, float y, float scale){\n   rectMode(CENTER);\n";
+
+  let msg;
+  if (con == 0) {
+    msg =
+      "void shapes (float x, float y, float scale){\n   rectMode(CENTER);\n";
+  } else if (con == 1) {
+    msg = "function shapes (x, y, scale){\n   rectMode(CENTER);\n";
+  }
 
   for (let i = 0; i < shapes.length; i++) {
     msg += "   " + shapes[i].generatePro(x, y, "\n") + "\n";
   }
 
-  msg += "\n}";
+  msg += "}";
 
   console.log(msg);
   copyStringToClipboard(msg);
 }
 
-function processingMsg() {
+function processingMsg(i) {
   let x = canvaX / 2;
   let y = canvaY / 2;
-  let msg =
-    "void shapes (float x, float y, float scale){<br>   rectMode(CENTER);<br>";
+  if (i == 0) {
+    msg =
+      "void shapes (float x, float y, float scale){<br>   rectMode(CENTER);<br>";
+  } else if (i == 1) {
+    msg = "function shapes (x, y, scale){<br>   rectMode(CENTER);<br>";
+  }
 
   for (let i = 0; i < shapes.length; i++) {
     msg += "   " + shapes[i].generatePro(x, y, "<br>") + "<br>";
   }
 
-  msg += "}<br>";
+  msg += "}";
 
   return msg;
 }
