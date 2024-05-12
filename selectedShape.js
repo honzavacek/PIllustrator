@@ -38,20 +38,6 @@ class SelectedShape extends Shape {
     }
   }
 
-  getV() {
-    let t = shapes[this.arr[0]].top();
-    let b = shapes[this.arr[0]].bottom();
-    let r = shapes[this.arr[0]].right();
-    let l = shapes[this.arr[0]].left();
-    for (let i = 1; i < this.arr.lenght; i++) {
-      if (shapes[this.arr[i]].top() < t) t = shapes[this.arr[i]].top();
-      if (shapes[this.arr[i]].bottom() > b) b = shapes[this.arr[i]].bottom();
-      if (shapes[this.arr[i]].left() < l) l = shapes[this.arr[i]].left();
-      if (shapes[this.arr[i]].top() < r) r = shapes[this.arr[i]].right();
-    }
-    return [t, b, r, l];
-  }
-
   displaySelected() {
     cv.push();
     for (let i = 0; i < this.infos.length; i++) {
@@ -69,12 +55,19 @@ class SelectedShape extends Shape {
       if (this.w < 0) {
         for (let i = 0; i < this.infos.length; i++) {
           this.infos[i].kx *= -1;
+          this.infos[i].r *= -1;
+
+          while (this.infos[i].r < 0) this.infos[i].r += 2 * PI;
+          while (this.infos[i].r > 2 * PI) this.infos[i].r -= 2 * PI;
         }
         this.w *= -1;
       }
       if (this.h < 0) {
         for (let i = 0; i < this.infos.length; i++) {
           this.infos[i].ky *= -1;
+          this.infos[i].r *= -1;
+          while (this.infos[i].r < 0) this.infos[i].r += 2 * PI;
+          while (this.infos[i].r > 2 * PI) this.infos[i].r -= 2 * PI;
         }
         this.h *= -1;
       }
@@ -94,7 +87,11 @@ class SelectedShape extends Shape {
       //(this.w * cos(this.infos[i].r) + this.h * sin(this.infos[i].r));
       shapes[this.infos[i].index].h = this.infos[i].kh * this.h;
       //(this.w * sin(this.infos[i].r) + this.h * cos(this.infos[i].r));
-      shapes[this.infos[i].index].r = this.infos[i].r + this.r;
+
+      let mult = 1;
+      if (this.w < 0) mult *= -1;
+      if (this.h < 0) mult *= -1;
+      shapes[this.infos[i].index].r = mult * this.infos[i].r + this.r;
     }
     //}
 
